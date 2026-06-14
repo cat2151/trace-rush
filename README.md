@@ -7,6 +7,7 @@
 - https://bsky.app/profile/cat2151.bsky.social/post/3mo5gwvcdvk2c
 
 # TODO候補
+- refactor
 - 自分が描画したlineを、敗北時だけ描画する
     - 焦ってずしゃっとズレた描線になっている、ことを可視化する
         - 要は敗北原因を可視化する
