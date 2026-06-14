@@ -1,0 +1,29 @@
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:#0f0f11;color:#e8e8ec;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;}
+#app{max-width:640px;margin:0 auto;padding:1rem;}
+h1{font-size:22px;font-weight:600;letter-spacing:0.04em;text-align:center;margin-bottom:1rem;color:#e8e8ec;}
+h1 span{color:#378ADD;}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:0.75rem;}
+.stat{background:#1c1c20;border-radius:10px;padding:0.75rem 1rem;text-align:center;border:0.5px solid #2a2a30;}
+.stat-label{font-size:11px;color:#888;margin-bottom:4px;}
+.stat-value{font-size:22px;font-weight:500;color:#e8e8ec;}
+.controls{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+#live-score{font-size:26px;font-weight:500;color:#e8e8ec;min-width:72px;text-align:right;line-height:1.1;}
+#live-label{font-size:11px;color:#888;text-align:right;}
+.score-wrap{flex:1;}
+#score-bar-wrap{height:8px;background:#2a2a30;border-radius:4px;overflow:hidden;margin:0.4rem 0;}
+#score-bar{height:100%;width:0%;border-radius:4px;transition:width 0.06s,background 0.15s;}
+#status-msg{font-size:13px;color:#888;}
+.btn-row{display:flex;gap:6px;flex-shrink:0;}
+button{background:transparent;border:0.5px solid #3a3a42;border-radius:8px;padding:6px 14px;font-size:13px;color:#aaa;cursor:pointer;transition:background 0.15s;}
+button:hover{background:#2a2a30;}
+.canvas-wrap{position:relative;}
+canvas{display:block;width:100%;border-radius:12px;border:0.5px solid #2a2a30;background:#16161a;touch-action:none;cursor:crosshair;}
+#pass-flash,#fail-flash{display:none;position:absolute;inset:0;border-radius:12px;pointer-events:none;}
+#pass-flash{border:3px solid #1D9E75;}
+#fail-flash{border:3px solid #E24B4A;}
+.legend{font-size:11px;color:#666;margin-top:8px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.legend span{display:flex;align-items:center;gap:4px;}
+.legend-score-high{color:#1D9E75;}
+.legend-score-mid{color:#EF9F27;}
+.legend-score-low{color:#E24B4A;}

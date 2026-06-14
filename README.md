@@ -30,3 +30,20 @@
 
 # scope外
 - 要望をきいて回答する
+
+## 開発
+
+- install
+
+```sh
+pnpm install
+pnpm dev
+```
+
+- build
+
+```sh
+pnpm build
+pnpm test
+pnpm preview
+```
