@@ -6,6 +6,60 @@ import { createRenderer } from "./renderer";
 import { distance, distanceToPointScore, normalizedScore, realPointCount, scoreToColor } from "./scoring";
 import type { GameState, Point, PointScore } from "./types";
 
+const app = document.querySelector<HTMLDivElement>("#app");
+if (!app) {
+  throw new Error("Element #app was not found.");
+}
+
+app.innerHTML = `
+  <h1>Trace <span>Rush</span></h1>
+
+  <div class="stat-row">
+    <div class="stat">
+      <div class="stat-label">クリア数</div>
+      <div class="stat-value" id="s-pass">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">挑戦数</div>
+      <div class="stat-value" id="s-total">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">最高スコア</div>
+      <div class="stat-value" id="s-best">—</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div>
+      <div id="live-score">—</div>
+      <div id="live-label">/ 100</div>
+    </div>
+    <div class="score-wrap">
+      <div id="score-bar-wrap">
+        <div id="score-bar"></div>
+      </div>
+      <div id="status-msg">START からなぞってください</div>
+    </div>
+    <div class="btn-row">
+      <button id="next-btn" type="button">新しい曲線</button>
+      <button id="clear-btn" type="button">やり直し</button>
+    </div>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="c" height="400"></canvas>
+    <div id="pass-flash"></div>
+    <div id="fail-flash"></div>
+  </div>
+
+  <div class="legend">
+    <span>線の色:</span>
+    <span class="legend-score-high">■ 満点（真上）</span>
+    <span class="legend-score-mid">■ 中程度</span>
+    <span class="legend-score-low">■ ギリギリ</span>
+  </div>
+`;
+
 function getElement<T extends HTMLElement>(id: string, ctor: { new (): T }): T {
   const element = document.getElementById(id);
   if (!(element instanceof ctor)) {

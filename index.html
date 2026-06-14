@@ -1,49 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Trace Rush</title>
-</head>
-<body>
-<div id="app">
-  <h1>Trace <span>Rush</span></h1>
-
-  <div class="stat-row">
-    <div class="stat"><div class="stat-label">クリア数</div><div class="stat-value" id="s-pass">0</div></div>
-    <div class="stat"><div class="stat-label">挑戦数</div><div class="stat-value" id="s-total">0</div></div>
-    <div class="stat"><div class="stat-label">最高スコア</div><div class="stat-value" id="s-best">—</div></div>
-  </div>
-
-  <div class="controls">
-    <div>
-      <div id="live-score">—</div>
-      <div id="live-label">/ 100</div>
-    </div>
-    <div class="score-wrap">
-      <div id="score-bar-wrap"><div id="score-bar"></div></div>
-      <div id="status-msg">START からなぞってください</div>
-    </div>
-    <div class="btn-row">
-      <button id="next-btn">新しい曲線</button>
-      <button id="clear-btn">やり直し</button>
-    </div>
-  </div>
-
-  <div class="canvas-wrap">
-    <canvas id="c" height="400"></canvas>
-    <div id="pass-flash"></div>
-    <div id="fail-flash"></div>
-  </div>
-
-  <div class="legend">
-    <span>線の色:</span>
-    <span class="legend-score-high">■ 満点（真上）</span>
-    <span class="legend-score-mid">■ 中程度</span>
-    <span class="legend-score-low">■ ギリギリ</span>
-  </div>
-</div>
-
-<script type="module" src="/src/main.ts"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#0f0f11" />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <title>Trace Rush</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>
