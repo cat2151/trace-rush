@@ -58,6 +58,8 @@ app.innerHTML = `
     <span class="legend-score-mid">■ 中程度</span>
     <span class="legend-score-low">■ ギリギリ</span>
   </div>
+
+  <a class="repo-readme-link" href="https://github.com/cat2151/trace-rush">GitHub</a>
 `;
 
 function getElement<T extends HTMLElement>(id: string, ctor: { new (): T }): T {

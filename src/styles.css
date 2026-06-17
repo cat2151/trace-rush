@@ -27,3 +27,5 @@ canvas{display:block;width:100%;border-radius:12px;border:0.5px solid #2a2a30;ba
 .legend-score-high{color:#1D9E75;}
 .legend-score-mid{color:#EF9F27;}
 .legend-score-low{color:#E24B4A;}
+.repo-readme-link{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));color:#888;font-size:12px;text-decoration:none;}
+.repo-readme-link:hover{color:#e8e8ec;text-decoration:underline;}
