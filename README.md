@@ -7,7 +7,7 @@
 - https://bsky.app/profile/cat2151.bsky.social/post/3mo5gwvcdvk2c
 
 # TODO候補
-- refactor
+- gameについて、repository README.ja.html へのlinkを実装する、例えば左下につける
 - 「やりなおす」ボタンの意味がないので削除して認知負荷を下げる
 - 自分が描画したlineを、敗北時だけ描画する
     - 焦ってずしゃっとズレた描線になっている、ことを可視化する
@@ -24,6 +24,7 @@
 - 考え方として、描いて気持ちの良い、満足感のある、という見た目の線を導入していく
     - svg import
     - 画像 to svg
+- 「タブレット端末を認識したら、指定URLを開く」というWindows Rust常駐アプリを実装する : LLMに調査させる。もうありそう。なければ自作 : これはUX検証用、実験用、の機能である
 
 # scope
 - 自分用
