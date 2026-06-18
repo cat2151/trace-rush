@@ -42,7 +42,6 @@ app.innerHTML = `
     </div>
     <div class="btn-row">
       <button id="next-btn" type="button">新しい曲線</button>
-      <button id="clear-btn" type="button">やり直し</button>
     </div>
   </div>
 
@@ -79,7 +78,6 @@ const statusMsg = getElement("status-msg", HTMLDivElement);
 const sPass = getElement("s-pass", HTMLDivElement);
 const sTotal = getElement("s-total", HTMLDivElement);
 const sBest = getElement("s-best", HTMLDivElement);
-const clearBtn = getElement("clear-btn", HTMLButtonElement);
 const nextBtn = getElement("next-btn", HTMLButtonElement);
 const passFlash = getElement("pass-flash", HTMLDivElement);
 const failFlash = getElement("fail-flash", HTMLDivElement);
@@ -389,12 +387,6 @@ canvas.addEventListener("pointercancel", () => {
     onFail("失敗 — ペンを離さず終点まで");
   }
   markDirty();
-});
-
-clearBtn.addEventListener("click", () => {
-  if (state === "playing" || state === "idle" || state === "cleared") {
-    resetAttempt();
-  }
 });
 
 nextBtn.addEventListener("click", () => {
