@@ -5,6 +5,7 @@ import type { GameState, Point, PointScore } from "./types";
 type RenderState = {
   points: Point[];
   pointScores: PointScore[];
+  attemptPath: Point[];
   state: GameState;
   headIdx: number;
   endTempScore: PointScore | null;
@@ -154,6 +155,40 @@ export function createRenderer(canvas: HTMLCanvasElement) {
     ctx.restore();
   }
 
+  function drawFailedAttemptPath(attemptPath: Point[], state: GameState) {
+    if (state !== "failing" || attemptPath.length === 0) {
+      return;
+    }
+
+    ctx.save();
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = "rgba(15,15,17,0.8)";
+    ctx.lineWidth = 7;
+    ctx.beginPath();
+    ctx.moveTo(attemptPath[0].x, attemptPath[0].y);
+    for (let i = 1; i < attemptPath.length; i++) {
+      ctx.lineTo(attemptPath[i].x, attemptPath[i].y);
+    }
+    ctx.stroke();
+
+    ctx.strokeStyle = colors.attempt;
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    ctx.restore();
+
+    const failurePoint = attemptPath[attemptPath.length - 1];
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(failurePoint.x, failurePoint.y, 6, 0, Math.PI * 2);
+    ctx.fillStyle = colors.attempt;
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = colors.text;
+    ctx.stroke();
+    ctx.restore();
+  }
+
   function drawEndpointMarkers(points: Point[], realTotal: number, drawScores: PointScore[], state: GameState) {
     if (realTotal <= 0) {
       return;
@@ -185,7 +220,7 @@ export function createRenderer(canvas: HTMLCanvasElement) {
   }
 
   function draw(gameState: RenderState) {
-    const { points, pointScores, state, headIdx, endTempScore } = gameState;
+    const { points, pointScores, attemptPath, state, headIdx, endTempScore } = gameState;
     ctx.clearRect(0, 0, width, height);
 
     const realTotal = realPointCount(points);
@@ -199,6 +234,7 @@ export function createRenderer(canvas: HTMLCanvasElement) {
     drawUnhitPoints(points, realTotal, firstUnhit);
     drawHitPath(points, drawScores);
     drawNextTarget(points, state, headIdx, realTotal);
+    drawFailedAttemptPath(attemptPath, state);
     drawEndpointMarkers(points, realTotal, drawScores, state);
   }
 

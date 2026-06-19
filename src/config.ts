@@ -13,6 +13,7 @@ export const colors = Object.freeze({
   pass: "#1D9E75",
   warning: "#EF9F27",
   fail: "#E24B4A",
+  attempt: "#FF6B9E",
   accent: "#378ADD",
   start: "#E8A020",
   text: "#fff",

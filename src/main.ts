@@ -95,6 +95,7 @@ let penX: number | null = null;
 let penY: number | null = null;
 let prevDist = Infinity;
 let pointScores: PointScore[] = [];
+let attemptPath: Point[] = [];
 let headIdx = 0;
 let state: GameState = "idle";
 let endBestDist = Infinity;
@@ -199,6 +200,8 @@ function processPenPoint(x: number, y: number) {
 }
 
 function handlePenMove(nextX: number, nextY: number) {
+  attemptPath.push({ x: nextX, y: nextY });
+
   if (penX === null || penY === null) {
     penX = nextX;
     penY = nextY;
@@ -266,7 +269,7 @@ function onFail(message: string) {
   totalCount++;
   sTotal.textContent = String(totalCount);
   statusMsg.style.color = colors.fail;
-  statusMsg.textContent = `${message} — タッチで即リトライ`;
+  statusMsg.textContent = `${message} — ピンク線があなたの描線です。タッチで即リトライ`;
   failFlash.style.display = "block";
   markDirty();
 }
@@ -274,6 +277,7 @@ function onFail(message: string) {
 function resetAttempt() {
   headIdx = 0;
   pointScores = [];
+  attemptPath = [];
   prevDist = Infinity;
   penX = null;
   penY = null;
@@ -293,7 +297,7 @@ function resetAttempt() {
 
 function renderLoop() {
   if (dirty) {
-    renderer.draw({ points, pointScores, state, headIdx, endTempScore });
+    renderer.draw({ points, pointScores, attemptPath, state, headIdx, endTempScore });
     dirty = false;
   }
   requestAnimationFrame(renderLoop);
@@ -363,11 +367,13 @@ canvas.addEventListener(
   { passive: false },
 );
 
-canvas.addEventListener("pointerup", () => {
+canvas.addEventListener("pointerup", (event) => {
   if (!drawing) {
     return;
   }
 
+  event.preventDefault();
+  processEvent(event);
   resetPointer();
   if (state === "cleared") {
     onClear();
@@ -397,6 +403,7 @@ function newCurve() {
   state = "idle";
   headIdx = 0;
   pointScores = [];
+  attemptPath = [];
   prevDist = Infinity;
   endBestDist = Infinity;
   endTempScore = null;
