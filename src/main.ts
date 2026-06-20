@@ -3,7 +3,7 @@ import "./styles.css";
 import { colors, config } from "./config";
 import { createRandomCurve } from "./curve";
 import { createRenderer } from "./renderer";
-import { distance, distanceToPointScore, normalizedScore, realPointCount, scoreToColor } from "./scoring";
+import { distance, distanceToPointScore, isWithinPassRange, normalizedScore, realPointCount, scoreToColor } from "./scoring";
 import type { GameState, Point, PointScore } from "./types";
 
 const app = document.querySelector<HTMLDivElement>("#app");
@@ -142,6 +142,11 @@ function processPenPoint(x: number, y: number) {
       return;
     }
 
+    if (!isWithinPassRange(x, y, [endPoint])) {
+      onFail("合格範囲の外に出ました");
+      return;
+    }
+
     const endDistance = distance(x, y, endPoint.x, endPoint.y);
     if (endDistance < endBestDist) {
       endBestDist = endDistance;
@@ -167,6 +172,13 @@ function processPenPoint(x: number, y: number) {
     if (currentDistance <= config.HIT_RADIUS) {
       onFail("描きすぎ");
     }
+    return;
+  }
+
+  const previousPoint = points[headIdx - 1];
+  const activePassRanges = previousPoint ? [previousPoint, headPoint] : [headPoint];
+  if (!isWithinPassRange(x, y, activePassRanges)) {
+    onFail("合格範囲の外に出ました");
     return;
   }
 
@@ -200,11 +212,10 @@ function processPenPoint(x: number, y: number) {
 }
 
 function handlePenMove(nextX: number, nextY: number) {
-  attemptPath.push({ x: nextX, y: nextY });
-
   if (penX === null || penY === null) {
     penX = nextX;
     penY = nextY;
+    attemptPath.push({ x: nextX, y: nextY });
     processPenPoint(nextX, nextY);
     return;
   }
@@ -215,12 +226,16 @@ function handlePenMove(nextX: number, nextY: number) {
   if (moveDistance <= config.INTERP_STEP) {
     penX = nextX;
     penY = nextY;
+    attemptPath.push({ x: nextX, y: nextY });
     processPenPoint(nextX, nextY);
   } else {
     const steps = Math.ceil(moveDistance / config.INTERP_STEP);
     for (let i = 1; i <= steps; i++) {
       const t = i / steps;
-      processPenPoint(penX + dx * t, penY + dy * t);
+      const x = penX + dx * t;
+      const y = penY + dy * t;
+      attemptPath.push({ x, y });
+      processPenPoint(x, y);
       if (state === "failing") {
         break;
       }
@@ -303,8 +318,7 @@ function renderLoop() {
   requestAnimationFrame(renderLoop);
 }
 
-function getXY(event: PointerEvent): Point {
-  const rect = canvas.getBoundingClientRect();
+function getXY(event: PointerEvent, rect: DOMRect): Point {
   const scaleX = width / rect.width;
   const scaleY = height / rect.height;
   return {
@@ -313,13 +327,13 @@ function getXY(event: PointerEvent): Point {
   };
 }
 
-function processEvent(event: PointerEvent) {
+function processEvent(event: PointerEvent, rect = canvas.getBoundingClientRect()) {
   const events = event.getCoalescedEvents ? event.getCoalescedEvents() : [event];
   for (const coalescedEvent of events) {
     if (state === "failing" || state === "idle") {
       break;
     }
-    const point = getXY(coalescedEvent);
+    const point = getXY(coalescedEvent, rect);
     handlePenMove(point.x, point.y);
   }
 }
@@ -335,6 +349,7 @@ canvas.addEventListener(
   "pointerdown",
   (event) => {
     event.preventDefault();
+    const rect = canvas.getBoundingClientRect();
     if (state === "failing") {
       resetAttempt();
       state = "playing";
@@ -349,7 +364,7 @@ canvas.addEventListener(
     penX = null;
     penY = null;
     prevDist = Infinity;
-    processEvent(event);
+    processEvent(event, rect);
     markDirty();
   },
   { passive: false },

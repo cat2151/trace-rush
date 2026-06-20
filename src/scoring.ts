@@ -11,6 +11,10 @@ export function distance(ax: number, ay: number, bx: number, by: number): number
   return Math.sqrt(dx * dx + dy * dy);
 }
 
+export function isWithinPassRange(x: number, y: number, targets: Point[]): boolean {
+  return targets.some((target) => distance(x, y, target.x, target.y) <= config.HIT_RADIUS);
+}
+
 export function distanceToPointScore(distanceValue: number): number {
   return config.PT_MAX - (Math.min(distanceValue, config.HIT_RADIUS) / config.HIT_RADIUS) * (config.PT_MAX - config.PT_MIN);
 }

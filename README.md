@@ -7,7 +7,6 @@
 - https://bsky.app/profile/cat2151.bsky.social/post/3mo5gwvcdvk2c
 
 # TODO候補
-- 合格範囲の外に出たら即敗北にする
 - 合格範囲は勝利で狭くなり敗北で広くなる
 - 合格範囲は曲線の周囲に描画とする
 - try数は不要、間接的に敗北数の表示になるので、成功体験が薄まってしまう
