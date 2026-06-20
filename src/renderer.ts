@@ -9,6 +9,7 @@ type RenderState = {
   state: GameState;
   headIdx: number;
   endTempScore: PointScore | null;
+  penCursor: Point | null;
 };
 
 export function createRenderer(canvas: HTMLCanvasElement) {
@@ -219,8 +220,33 @@ export function createRenderer(canvas: HTMLCanvasElement) {
     drawMarker(endPoint.x, endPoint.y, "END", endDone ? colors.pass : colors.accent);
   }
 
+  function drawPenCursor(penCursor: Point | null) {
+    if (!penCursor) {
+      return;
+    }
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(penCursor.x, penCursor.y, 8, 0, Math.PI * 2);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "rgba(15,15,17,0.85)";
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(penCursor.x, penCursor.y, 8, 0, Math.PI * 2);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = colors.text;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(penCursor.x, penCursor.y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = colors.accent;
+    ctx.fill();
+    ctx.restore();
+  }
+
   function draw(gameState: RenderState) {
-    const { points, pointScores, attemptPath, state, headIdx, endTempScore } = gameState;
+    const { points, pointScores, attemptPath, state, headIdx, endTempScore, penCursor } = gameState;
     ctx.clearRect(0, 0, width, height);
 
     const realTotal = realPointCount(points);
@@ -236,6 +262,7 @@ export function createRenderer(canvas: HTMLCanvasElement) {
     drawNextTarget(points, state, headIdx, realTotal);
     drawFailedAttemptPath(attemptPath, state);
     drawEndpointMarkers(points, realTotal, drawScores, state);
+    drawPenCursor(penCursor);
   }
 
   return {

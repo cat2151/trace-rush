@@ -19,6 +19,7 @@ button{background:transparent;border:0.5px solid #3a3a42;border-radius:8px;paddi
 button:hover{background:#2a2a30;}
 .canvas-wrap{position:relative;}
 canvas{display:block;width:100%;border-radius:12px;border:0.5px solid #2a2a30;background:#16161a;touch-action:none;cursor:crosshair;}
+canvas.pen-pointer{cursor:none;}
 #pass-flash,#fail-flash{display:none;position:absolute;inset:0;border-radius:12px;pointer-events:none;}
 #pass-flash{border:3px solid #1D9E75;}
 #fail-flash{border:3px solid #E24B4A;}

@@ -100,6 +100,7 @@ let headIdx = 0;
 let state: GameState = "idle";
 let endBestDist = Infinity;
 let endTempScore: PointScore | null = null;
+let penCursor: Point | null = null;
 
 function getRealPointCount(): number {
   return realPointCount(points);
@@ -312,7 +313,7 @@ function resetAttempt() {
 
 function renderLoop() {
   if (dirty) {
-    renderer.draw({ points, pointScores, attemptPath, state, headIdx, endTempScore });
+    renderer.draw({ points, pointScores, attemptPath, state, headIdx, endTempScore, penCursor });
     dirty = false;
   }
   requestAnimationFrame(renderLoop);
@@ -338,6 +339,27 @@ function processEvent(event: PointerEvent, rect = canvas.getBoundingClientRect()
   }
 }
 
+function updatePenCursor(event: PointerEvent, rect = canvas.getBoundingClientRect()) {
+  if (event.pointerType !== "pen") {
+    clearPenCursor();
+    return;
+  }
+
+  penCursor = getXY(event, rect);
+  canvas.classList.add("pen-pointer");
+  markDirty();
+}
+
+function clearPenCursor() {
+  if (penCursor === null && !canvas.classList.contains("pen-pointer")) {
+    return;
+  }
+
+  penCursor = null;
+  canvas.classList.remove("pen-pointer");
+  markDirty();
+}
+
 function resetPointer() {
   drawing = false;
   penX = null;
@@ -350,6 +372,7 @@ canvas.addEventListener(
   (event) => {
     event.preventDefault();
     const rect = canvas.getBoundingClientRect();
+    updatePenCursor(event, rect);
     if (state === "failing") {
       resetAttempt();
       state = "playing";
@@ -370,9 +393,14 @@ canvas.addEventListener(
   { passive: false },
 );
 
+canvas.addEventListener("pointerenter", (event) => {
+  updatePenCursor(event);
+});
+
 canvas.addEventListener(
   "pointermove",
   (event) => {
+    updatePenCursor(event);
     if ((state !== "playing" && state !== "cleared") || !drawing) {
       return;
     }
@@ -383,6 +411,7 @@ canvas.addEventListener(
 );
 
 canvas.addEventListener("pointerup", (event) => {
+  updatePenCursor(event);
   if (!drawing) {
     return;
   }
@@ -398,7 +427,16 @@ canvas.addEventListener("pointerup", (event) => {
   markDirty();
 });
 
-canvas.addEventListener("pointercancel", () => {
+canvas.addEventListener("pointerleave", (event) => {
+  if (event.pointerType === "pen" && !drawing) {
+    clearPenCursor();
+  }
+});
+
+canvas.addEventListener("pointercancel", (event) => {
+  if (event.pointerType === "pen") {
+    clearPenCursor();
+  }
   if (!drawing) {
     return;
   }
