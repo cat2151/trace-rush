@@ -20,10 +20,6 @@ app.innerHTML = `
       <div class="stat-value" id="s-pass">0</div>
     </div>
     <div class="stat">
-      <div class="stat-label">挑戦数</div>
-      <div class="stat-value" id="s-total">0</div>
-    </div>
-    <div class="stat">
       <div class="stat-label">最高スコア</div>
       <div class="stat-value" id="s-best">—</div>
     </div>
@@ -76,7 +72,6 @@ const liveLabel = getElement("live-label", HTMLDivElement);
 const scoreBar = getElement("score-bar", HTMLDivElement);
 const statusMsg = getElement("status-msg", HTMLDivElement);
 const sPass = getElement("s-pass", HTMLDivElement);
-const sTotal = getElement("s-total", HTMLDivElement);
 const sBest = getElement("s-best", HTMLDivElement);
 const nextBtn = getElement("next-btn", HTMLButtonElement);
 const passFlash = getElement("pass-flash", HTMLDivElement);
@@ -88,7 +83,6 @@ let height = 0;
 let points: Point[] = [];
 let drawing = false;
 let passCount = 0;
-let totalCount = 0;
 let bestScore = 0;
 let dirty = false;
 let penX: number | null = null;
@@ -256,8 +250,6 @@ function onClear() {
     pointScores.push(endTempScore);
   }
   const currentScore = calcNormScore();
-  totalCount++;
-  sTotal.textContent = String(totalCount);
   if (currentScore > bestScore) {
     bestScore = currentScore;
     sBest.textContent = String(Math.round(currentScore));
@@ -282,8 +274,6 @@ function onFail(message: string) {
 
   state = "failing";
   endTempScore = null;
-  totalCount++;
-  sTotal.textContent = String(totalCount);
   statusMsg.style.color = colors.fail;
   statusMsg.textContent = `${message} — ピンク線があなたの描線です。タッチで即リトライ`;
   failFlash.style.display = "block";
